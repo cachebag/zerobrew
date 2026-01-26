@@ -1,3 +1,11 @@
+## Install
+
+```bash
+curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.sh | bash
+```
+
+After install, run the export command it prints, or restart your terminal.
+
 # zerobrew
 
 A faster, modern Mac package manager.
@@ -15,14 +23,6 @@ This leads to dramatic speedups, up to 5x cold and 20x warm. Full benchmarks [he
 | libsodium | 2353ms | 392ms | 130ms | 6.0x | 18.1x |
 | sqlite | 2876ms | 625ms | 159ms | 4.6x | 18.1x |
 | tesseract | 18950ms | 5536ms | 643ms | 3.4x | 29.5x | 
-
-## Install
-
-```bash
-curl -sSL https://raw.githubusercontent.com/lucasgelfond/zerobrew/main/install.sh | bash
-```
-
-After install, run the export command it prints, or restart your terminal.
 
 ##  Using `zb`
 
