@@ -32,8 +32,10 @@ After install, run the `export` command it prints (or restart your terminal).
 ```bash
 zb install jq                   # install one package
 zb install wget git             # install multiple
-zb install --file Brewfile      # install from a manifest
-zb bundle                       # shorthand for ./Brewfile
+zb bundle                       # install from Brewfile
+zb bundle install -f myfile     # install from custom file
+zb bundle dump                  # export installed packages to Brewfile
+zb bundle dump -f out --force   # dump to custom file (overwrite)
 zb uninstall jq                 # uninstall one package
 zb reset                        # uninstall everything
 zb gc                           # garbage collect unused store entries
