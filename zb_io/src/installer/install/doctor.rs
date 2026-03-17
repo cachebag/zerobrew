@@ -157,7 +157,10 @@ impl Installer {
             summary.removed_missing_records += 1;
         }
 
-        if !report.stale_store_refs.is_empty() {
+        let needs_refcount_recompute =
+            !report.stale_store_refs.is_empty() || !report.missing_cellar_kegs.is_empty();
+
+        if needs_refcount_recompute {
             let installed = self.db.list_installed()?;
             let mut corrected: HashMap<&str, i64> = HashMap::new();
             for keg in &installed {
@@ -173,7 +176,8 @@ impl Installer {
                 .collect();
 
             self.db.replace_store_refs(&corrected_refs)?;
-            summary.fixed_store_refs = report.stale_store_refs.len();
+            summary.fixed_store_refs =
+                report.stale_store_refs.len() + report.missing_cellar_kegs.len();
         }
 
         for key in &report.orphaned_store_entries {

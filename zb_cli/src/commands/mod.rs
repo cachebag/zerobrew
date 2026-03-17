@@ -1,5 +1,6 @@
 pub mod bundle;
 pub mod completion;
+pub mod doctor;
 pub mod gc;
 pub mod info;
 pub mod init;

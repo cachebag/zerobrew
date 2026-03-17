@@ -123,6 +123,10 @@ pub enum Commands {
     Info {
         formula: String,
     },
+    Doctor {
+        #[arg(long)]
+        repair: bool,
+    },
     Gc,
     Reset {
         #[arg(long, short = 'y')]

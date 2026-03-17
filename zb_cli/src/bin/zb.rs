@@ -76,6 +76,7 @@ async fn run(cli: Cli) -> Result<(), zb_core::Error> {
         Commands::Migrate { yes, force } => {
             commands::migrate::execute(&mut installer, yes, force, &mut ui).await
         }
+        Commands::Doctor { repair } => commands::doctor::execute(&mut installer, repair, &mut ui),
         Commands::List => commands::list::execute(&mut installer),
         Commands::Info { formula } => commands::info::execute(&mut installer, formula),
         Commands::Gc => commands::gc::execute(&mut installer),
