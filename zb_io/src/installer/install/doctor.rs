@@ -100,7 +100,9 @@ impl Installer {
         };
 
         for entry in &disk_store_entries {
-            if !store_keys_in_db.contains(entry.as_str()) {
+            if !store_keys_in_db.contains(entry.as_str())
+                && !store_keys_used.contains_key(entry.as_str())
+            {
                 report.orphaned_store_entries.push(entry.clone());
             }
         }
@@ -122,17 +124,32 @@ impl Installer {
             }
         }
 
+        let keg_files = self.db.list_keg_files()?;
+        let installed_set: HashSet<(&str, &str)> = installed
+            .iter()
+            .map(|k| (k.name.as_str(), k.version.as_str()))
+            .collect();
+
         for keg in &installed {
             let token = formula_token(&keg.name);
             let keg_path = self.cellar.keg_path(token, &keg.version);
-            if !keg_path.exists() {
+            if keg_path.exists() {
+                let linked = self.linker.collect_linked_files(&keg_path)?;
+                for file in linked {
+                    if !file.target_path.exists() {
+                        report.broken_symlinks.push(file.link_path);
+                    }
+                }
+            }
+        }
+
+        for record in &keg_files {
+            if !installed_set.contains(&(record.name.as_str(), record.version.as_str())) {
                 continue;
             }
-            let linked = self.linker.collect_linked_files(&keg_path)?;
-            for file in linked {
-                if !file.target_path.exists() {
-                    report.broken_symlinks.push(file.link_path);
-                }
+            let link = PathBuf::from(&record.linked_path);
+            if link.is_symlink() && !link.exists() && !report.broken_symlinks.contains(&link) {
+                report.broken_symlinks.push(link);
             }
         }
 
